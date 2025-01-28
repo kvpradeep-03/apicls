@@ -1,8 +1,9 @@
 <?php
     error_reporting(E_ALL ^ E_DEPRECATED);
-    require_once("REST.api.php");
-    require_once("lib/Database.class.php");
-    require_once("lib/Signup.class.php");
+    require_once($_SERVER['DOCUMENT_ROOT']."/api/REST.api.php");
+    require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Database.class.php");
+    require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Signup.class.php");
+    
 
     class API extends REST {
 
@@ -43,52 +44,9 @@
 
         }
 
-        private function verify(){
-            if($this->get_request_method() == "POST" and isset($this->_request['user']) and isset($this->_request['pass'])){
-                $user = $this->_request['user'];
-                $password =  $this->_request['pass'];
-
-                $flag = 0;
-                if($user == "admin"){
-                    if($password == "adminpass123"){
-                        $flag = 1;
-                    }
-                }
-
-                if($flag == 1){
-                    $data = [
-                        "status" => "verified"
-                    ];
-                    $data = $this->json($data);
-                    $this->response($data,200);
-                } else {
-                    $data = [
-                        "status" => "unauthorized"
-                    ];
-                    $data = $this->json($data);
-                    $this->response($data,401);
-                }
-            } else {
-                $data = [
-                        "status" => "bad_request"
-                    ];
-                    $data = $this->json($data);
-                    $this->response($data,400);
-            }
-        }
-
         private function test(){
                 $data = $this->json(getallheaders());
                 $this->response($data,200);
-        }
-
-        private function request_info(){
-            $data = $this->json($_SERVER);
-        }
-
-        function generate_hash(){
-            $bytes = random_bytes(16);
-            return bin2hex($bytes);
         }
 
         private function gen_hash(){
@@ -102,6 +60,36 @@
                 ];
                 $data = $this->json($data);
                 $this->response($data,200);
+            }
+        }
+
+        public function signup(){
+            if($this->get_request_method() == "POST" and isset($this->_request['username']) and isset($this->_request['email']) and isset($this->_request['password'])){
+                $username = $this->_request['username'];
+                $password = $this->_request['password'];
+                $email = $this->_request['email']; 
+                
+                try{
+                    $s = new Signup($username, $password, $email);
+                    $data = [
+                        "message" => "Signup success",
+                        "userid" => $s->getInsertID()
+                    ];
+                    $this->response($this->json($data),200);
+                }catch(Exception $e){
+                    $data = [
+                        "error" => $e->getMessage(),
+                    ];
+                    $this->response($this->json($data),409);
+                }
+                
+                
+            }else{
+                $data = [
+                    "error" => "bad request"
+                ];
+                $data = $this->json($data);
+                $this->response($data, 400);
             }
         }
 

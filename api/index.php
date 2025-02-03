@@ -4,6 +4,8 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 require_once($_SERVER['DOCUMENT_ROOT']."/api/REST.api.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Database.class.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Signup.class.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/User.class.php");
+require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Auth.class.php");
 
 
 class API extends REST
@@ -32,8 +34,9 @@ class API extends REST
         } else {
             if(isset($_GET['namespace'])) {
                 $dir = $_SERVER['DOCUMENT_ROOT'].'/api/apis/'.$_GET['namespace'];
+                //print($dir);
                 $methods = scandir($dir);
-                var_dump($methods);
+                //var_dump($methods);
                 foreach($methods as $m) {
                     if($m == "." or $m == "..") {
                         continue;

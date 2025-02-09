@@ -11,8 +11,9 @@ require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Auth.class.php");
 class API extends REST
 {
     public $data = "";
-    private $db = null;
+    private $db = NULL;
     public $current_call;
+    private $auth = NULL;
 
 
     public function __construct()
@@ -32,28 +33,75 @@ class API extends REST
         if((int)method_exists($this, $func) > 0) {
             $this->$func();
         } else {
-            if(isset($_GET['namespace'])) {
+            if(isset($_GET['namespace'])){
                 $dir = $_SERVER['DOCUMENT_ROOT'].'/api/apis/'.$_GET['namespace'];
-                //print($dir);
-                $methods = scandir($dir);
-                //var_dump($methods);
-                foreach($methods as $m) {
-                    if($m == "." or $m == "..") {
-                        continue;
-                    }
-                    $basem = basename($m, '.php');
-                    //echo "Trying to call $basem() for $func()\n";
-                    if($basem == $func) {
-                        include $dir."/".$m;
-                        $this->current_call = Closure::bind(${$basem}, $this, get_class());
-                        $this->$basem();
-                    }
+                $file = $dir.'/'.$func.'.php';
+
+                if(file_exists($file)){
+                    include $file;
+                    $this->current_call = Closure::bind(${$func}, $this, get_class());
+                    $this->$func();
                 }
-            } else {
+            }
+            /**
+             * Use this snippet to include multiple files.
+             */
+            // if(isset($_GET['namespace'])) {
+            //     $dir = $_SERVER['DOCUMENT_ROOT'].'/api/apis/'.$_GET['namespace'];
+            //     //print($dir);
+            //     $methods = scandir($dir);
+            //     //var_dump($methods);
+            //     foreach($methods as $m) {
+            //         if($m == "." or $m == "..") {
+            //             continue;
+            //         }
+            //         $basem = basename($m, '.php');
+            //         //echo "Trying to call $basem() for $func()\n";
+            //         if($basem == $func) {
+            //             include $dir."/".$m;
+            //             $this->current_call = Closure::bind(${$basem}, $this, get_class());
+            //             $this->$basem();
+            //         }
+            //     }
+            //} 
+            else {
                 //we can even process functions without namespace here.
                 $this->response($this->json(['error' => 'methood_not_found']), 404);
             }
         }
+    }
+
+    public function auth(){
+        $headers = getallheaders();
+        if(isset($headers['Authorization'])){
+            $token = explode(' ', $headers['Authorization']);
+            $this->auth = new Auth($token[1]);
+        }
+        
+    }
+
+    public function isAuthenticated(){
+        if($this->auth == NULL){
+            return false;
+        }
+        if($this->auth->getOAuth()->authenticate() and isset($_SESSION['username'])){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public function getUserName(){
+        return $_SESSION['username'];
+    }
+
+    public function die($e){
+        $data = [
+            "error" => $e->getMessage(),
+        ];
+        $data = $this->json($data);
+        $this->response($data, 400);
     }
 
     public function __call($method, $args)
@@ -61,7 +109,7 @@ class API extends REST
         if(is_callable($this->current_call)) {
             return call_user_func_array($this->current_call, $args);
         } else {
-            $this->response($this->json(['error' => 'methood_not_callable']), 404);
+            $this->response($this->json(['error' => 'method_not_callable']), 404);
         }
     }
 
@@ -124,4 +172,10 @@ class API extends REST
 // Initiiate Library
 
 $api = new API();
-$api->processApi();
+try{
+    $api->auth();
+    $api->processApi();
+}catch(Exception $e){
+    $api->die($e);
+}
+

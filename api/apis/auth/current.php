@@ -1,13 +1,11 @@
 <?php
 
 ${basename(__FILE__, '.php')} = function () {
-    if($this->get_request_method() == "POST" and isset($this->_request['refresh_token'])) {
-        $refresh_token = $this->_request['refresh_token'];
+    if($this->get_request_method() == "POST" and $this->isAuthenticated()) {
         try {
-            $auth = new OAuth($refresh_token);
             $data = [
-                "message" => "Refresh success",
-                "tokens" => $auth->refreshAccess()
+                "Username" => $this->getUserName(),
+                
             ];
             $data = $this->json($data);
             $this->response($data, 200);
@@ -16,7 +14,7 @@ ${basename(__FILE__, '.php')} = function () {
                 "error" => $e->getMessage(),
             ];
             $data = $this->json($data);
-            $this->response($data, 406);
+            $this->response($data, 403);
         }
     } else {
         $data = [

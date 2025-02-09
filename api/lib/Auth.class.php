@@ -12,6 +12,7 @@ class Auth
     private $db;
     private $isTockenAuth = false;
     private $loginTokens = null;
+    private $oauth;
 
     public function __construct($username, $password = null)
     {
@@ -29,7 +30,9 @@ class Auth
         }
 
         if($this->isTockenAuth) {
-            throw new Exception("Not Implemented");
+            $this->oauth = new OAuth($this->token);
+            $this->oauth->authenticate();
+            
         } else {
             $user = new User($this->username);
             $hash = $user->getPasswordHash();
@@ -38,11 +41,24 @@ class Auth
                 if(!$user->isActive()) {
                     throw new Exception("Check your email to activate your account.");
                 }
-                $this->loginTokens = $this->addSession();
+                $this->loginTokens = $this->addSession(7200);
             } else {
                 throw new Exception("Password mismatch");
             }
         }
+    }
+
+    /**
+     * returns the username of authenticated user.
+     */
+    public function getUserName(){
+        if($this->oauth->authenticate()){
+            return $this->oauth->getUserName();
+        }
+    }
+
+    public function getOAuth(){
+        return $this->oauth;
     }
 
     public function getAuthtokens()
@@ -51,11 +67,12 @@ class Auth
     }
 
     private function addSession()
-    {   
-        $oauth = new OAuth($this->username);
+    {
+        $oauth = new OAuth();
+        $oauth->setUsername($this->username);
         $session = $oauth->newSession();
         return $session;
-        
+
     }
 
     public static function generateRandomHash($len)

@@ -6,6 +6,8 @@ require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Database.class.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Signup.class.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/User.class.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/api/lib/Auth.class.php");
+require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Notes.class.php');
+require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Folder.class.php');
 
 
 class API extends REST

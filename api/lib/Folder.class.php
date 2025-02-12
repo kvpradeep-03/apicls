@@ -28,15 +28,14 @@ class Folder extends share
         if($this->id != null) {
             $query = "SELECT * FROM folder WHERE id=$this->id";
             $result = mysqli_query($this->db, $query);
-            if ($result) {
+            if ($result and mysqli_num_rows($result) == 1) {
                 $this->data = mysqli_fetch_assoc($result);
-                if ($this->data) {
-                    $this->id = $this->data['id'];
-                } else {
-                    throw new Exception("Folder not found");
-                }
+                if ($this->getOwner() != $_SESSION['username']) {
+                    throw new Exception("Unauthorized");
+                } 
+                $this->id = $this->data['id'];
             } else {
-                throw new Exception("Error: " . mysqli_error($this->db));
+                throw new Exception("Not found");
             }
         }
     }
@@ -91,7 +90,7 @@ class Folder extends share
             $this->refresh();
             return $result;
         } else {
-            throw new Exception("Note not loaded");
+            throw new Exception("Not found");
         }
     }
 
@@ -108,7 +107,7 @@ class Folder extends share
                 $result =  mysqli_query($this->db, $query);
                 return $result;
             } else {
-                throw new Exception("Folder not loaded");
+                throw new Exception("Not found");
             }
         } else {
             throw new Exception("Unauthorized");
@@ -156,6 +155,8 @@ class Folder extends share
                 $date = $data[$i]['created_at'];  // Store only the date
                 $c = new Carbon($date);
                 $data[$i]['created'] = $c->diffForHumans();
+                $f = new Folder($data[$i]['id']);
+                $data[$i]['count'] = $f->countNotes();
             }
             return $data;
         }else{

@@ -8,8 +8,8 @@ use Brevo\Client\Api\TransactionalEmailsApi;
 use Brevo\Client\Configuration;
 use GuzzleHttp\Client;
 
-class Signup {
-
+class Signup
+{
     private $username;
     private $password;
     private $email;
@@ -18,12 +18,13 @@ class Signup {
 
     private $db;
 
-    public function __construct($username, $password, $email){
+    public function __construct($username, $password, $email)
+    {
         $this->db = Database::getConnection();
         $this->username = $username;
         $this->password = $password;
         $this->email = $email;
-        if($this->userExists()){
+        if($this->userExists()) {
             throw new Exception("User already exists");
         }
         $bytes = random_bytes(16);
@@ -32,32 +33,37 @@ class Signup {
         $query = "INSERT INTO `auth` (`username`, `password`, `email`, `active`, `token`, `signup_time`) 
                   VALUES ('$username', '$password', '$email', '0', '$token', now());";
 
-        if(!mysqli_query($this->db, $query)){
+        if(!mysqli_query($this->db, $query)) {
             throw new Exception("Unable to signup.");
-        }else{
+        } else {
             $this->id = mysqli_insert_id($this->db);
             $this->sendVerificationMail();
+            session_start();
+            $_SESSION['username'] = $this->username;
             $f = new Folder();
             $f->createNew('Default Folder');
         }
     }
 
-    public function getInsertID(){
+    public function getInsertID()
+    {
         return $this->id;
     }
 
-    public function userExists(){
-        $querry = "SELECT * FROM `auth` WHERE `username` = '$this->username' or `email` = '$this->email';";
+    public function userExists()
+    {
+        $querry = "SELECT * FROM `auth` WHERE `username` = '$this->username';";
         $result = mysqli_query($this->db, $querry);
-        if(mysqli_num_rows($result)>0){
+        if(mysqli_num_rows($result) > 0) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    public function sendVerificationMail(){
+    public function sendVerificationMail()
+    {
         $config_json = file_get_contents('../../env.json');
-        $config = json_decode($config_json, true);  
+        $config = json_decode($config_json, true);
 
         $token = $this->token;
         // Replace with your Brevo API Key
@@ -72,7 +78,7 @@ class Signup {
             'sender' => ['name' => 'apicls', 'email' => 'kvpradeep60@gmail.com'],
             'to' => [['email' => $this->email, 'name' => $this->username]],
             'subject' => 'Verify your account',
-            'htmlContent' => '<h3> Please verify your account by <a href="https://apicls.zeal.wtf/verify?token=' . $token . '">clicking here</a> </h3>'
+            'htmlContent' => '<h3> Please verify your account by <a href="https://apicls.selfmade.lol/verify?token=' . $token . '">clicking here</a> </h3>'
 
         ];
 
@@ -85,17 +91,19 @@ class Signup {
 
     }
 
-    public function hashPassword(){
+    public function hashPassword()
+    {
         return password_hash($this->password, PASSWORD_BCRYPT);
     }
 
-    public static function verifyAccount($token){
+    public static function verifyAccount($token)
+    {
         $query = "SELECT * FROM auth WHERE token='$token';";
         $db = Database::getConnection();
         $result = mysqli_query($db, $query);
-        if($result and mysqli_num_rows($result) == 1){
+        if($result and mysqli_num_rows($result) == 1) {
             $data = mysqli_fetch_assoc($result);
-            if($data['active'] == 1){
+            if($data['active'] == 1) {
                 throw new Exception("Already Verified");
             }
 

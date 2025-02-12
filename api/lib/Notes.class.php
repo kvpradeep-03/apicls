@@ -28,13 +28,11 @@ class Notes extends Share
         if($this->id != null) {
             $query = "SELECT * FROM notes WHERE id=$this->id";
             $result = mysqli_query($this->db, $query);
-            if ($result) {
-                $this->data = mysqli_fetch_assoc($result);
-                if ($this->data) {
-                    $this->id = $this->data['id'];
-                } else {
-                    throw new Exception("Notes not found");
+            if ($result and mysqli_fetch_assoc($result)) {
+                if ($this->getOwner() != $_SESSION['username']) {
+                    throw new Exception("Unauthorized");
                 }
+                $this->id = $this->data['id'];
             } else {
                 throw new Exception("Error: " . mysqli_error($this->db));
             }
@@ -96,7 +94,7 @@ class Notes extends Share
                 $this->refresh();
                 return $result;
             } else {
-                throw new Exception("Note not loaded");
+                throw new Exception("Not found");
             }
         } else {
             throw new Exception("Unauthorized");
@@ -112,7 +110,7 @@ class Notes extends Share
                 $this->refresh();
                 return $result;
             } else {
-                throw new Exception("Note not loaded");
+                throw new Exception("Not found");
             }
         } else {
             throw new Exception("Unauthorized");
@@ -132,7 +130,7 @@ class Notes extends Share
                     throw new Exception("Something is not right");
                 }
             } else {
-                throw new Exception("Note not loaded");
+                throw new Exception("Not found");
             }
         } else {
             throw new Exception("Unauthorized");
@@ -146,7 +144,7 @@ class Notes extends Share
                 $result =  mysqli_query($this->db, $query);
                 return $result;
             } else {
-                throw new Exception("Note not loaded");
+                throw new Exception("Not found");
             }
         }else{
             throw new Exception("Unauthorized");
@@ -154,26 +152,22 @@ class Notes extends Share
     }
 
     public function createNew($title, $body, $folder){
-        //new Folder($folder);
-        if($folder){
-            $query = "SELECT `id` FROM `folder` WHERE `id` = $folder";
-            $result = mysqli_query($this->db, $query);
-            if(mysqli_num_rows($result) == 1){
-                if(isset($_SESSION['username']) and strlen($title) <= 45) {
-                    $query = "INSERT INTO `notes` (`title`, `body`, `owner`, `folder_id`) VALUES ('$title', '$body ','$_SESSION[username]', '$folder');";
-                    if(mysqli_query($this->db, $query)) {
-                        $this->id = mysqli_insert_id($this->db);
-                        $this->refresh();
-                        return $this->id;
-                    }
-                } else {
-                    throw new Exception("Cannot create note");
+        $f = new Folder($folder);
+        if($f->getOwner() == $_SESSION['username']){
+            if(isset($_SESSION['username']) and strlen($title) <= 45) {
+                $query = "INSERT INTO `notes` (`title`, `body`, `owner`, `folder_id`) VALUES ('$title', '$body ','$_SESSION[username]', '$folder');";
+                if(mysqli_query($this->db, $query)) {
+                    $this->id = mysqli_insert_id($this->db);
+                    $this->refresh();
+                    return $this->id;
                 }
-            }else{
-                throw new Exception("Folder ID $folder does not exist.");
+            } else {
+                throw new Exception("Cannot create note");
             }
-        }
 
+        }else{
+            throw new Exception("Unauthorized");
+        }
 
     }
 

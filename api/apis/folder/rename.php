@@ -5,7 +5,7 @@ ${basename(__FILE__, '.php')} = function () {
         $f = new Folder($this->_request['id']);
         if($f->rename($this->_request['name'])){
             $data = [
-                "error" => "Success",
+                "message" => "Success",
             ];
             $data = $this->json($data);
             $this->response($data, 200);

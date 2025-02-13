@@ -28,7 +28,8 @@ class Notes extends Share
         if($this->id != null) {
             $query = "SELECT * FROM notes WHERE id=$this->id";
             $result = mysqli_query($this->db, $query);
-            if ($result and mysqli_fetch_assoc($result)) {
+            if ($result and mysqli_num_rows($result)) {
+                $this->data = mysqli_fetch_assoc($result);
                 if ($this->getOwner() != $_SESSION['username']) {
                     throw new Exception("Unauthorized");
                 }

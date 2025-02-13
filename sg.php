@@ -18,11 +18,12 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Notes.class.php');
 session_start();
 $_SESSION['username'] = 'developer';
 
-try{
+try {
     print_r(Folder::getAllFolders());
-}catch(Exception $e){
+} catch(Exception $e) {
     echo $e->getMessage();
 }
+
 
 
 ?>

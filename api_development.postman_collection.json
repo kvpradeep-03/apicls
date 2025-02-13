@@ -1,0 +1,486 @@
+{
+	"info": {
+		"_postman_id": "7a99b055-6e7f-4d50-80d0-51651df01f82",
+		"name": "api_development",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30977549",
+		"_collection_link": "https://dev777-2351.postman.co/workspace/dev-Workspace~05400ec3-b8af-4a8c-8ddc-94342931faec/collection/30977549-7a99b055-6e7f-4d50-80d0-51651df01f82?action=share&source=collection_link&creator=30977549"
+	},
+	"item": [
+		{
+			"name": "Folder",
+			"item": [
+				{
+					"name": "List Folders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/folder/list",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"folder",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Notes In Folder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/folder/get_all_notes",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"folder",
+								"get_all_notes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Rename Folder",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "id",
+									"value": "12",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "renamed folder",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/folder/rename",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"folder",
+								"rename"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null,
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Folder",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/folder/new",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"folder",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Folder",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/folder/delete",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"folder",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "List",
+			"item": [
+				{
+					"name": "Get Note",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/notes/get",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"notes",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Note",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/notes/delete",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"notes",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Note",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/notes/edit",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"notes",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Note",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "https://apicls.selfmade.lol/api/notes/new",
+							"protocol": "https",
+							"host": [
+								"apicls",
+								"selfmade",
+								"lol"
+							],
+							"path": [
+								"api",
+								"notes",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/test",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"test"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "about call",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/about",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"about"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/auth/signup",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/auth/login",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "current user",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/auth/current",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"auth",
+						"current"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Refresh Access",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "refresh_token",
+							"value": "",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/auth/refresh",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"auth",
+						"refresh"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

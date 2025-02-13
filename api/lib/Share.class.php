@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Share function is deprecated
+ */
 class share{
 
     public function __construct($id, $type){

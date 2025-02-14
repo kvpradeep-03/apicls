@@ -383,7 +383,7 @@
 			"response": []
 		},
 		{
-			"name": "login",
+			"name": "Login",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -412,7 +412,36 @@
 			"response": []
 		},
 		{
-			"name": "current user",
+			"name": "Login Out",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://apicls.selfmade.lol/api/auth/login",
+					"protocol": "https",
+					"host": [
+						"apicls",
+						"selfmade",
+						"lol"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Current user",
 			"request": {
 				"auth": {
 					"type": "bearer",

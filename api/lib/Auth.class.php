@@ -32,7 +32,7 @@ class Auth
         if($this->isTockenAuth) {
             $this->oauth = new OAuth($this->token);
             $this->oauth->authenticate();
-            
+
         } else {
             $user = new User($this->username);
             $hash = $user->getPasswordHash();
@@ -51,13 +51,15 @@ class Auth
     /**
      * returns the username of authenticated user.
      */
-    public function getUserName(){
-        if($this->oauth->authenticate()){
+    public function getUserName()
+    {
+        if($this->oauth->authenticate()) {
             return $this->oauth->getUserName();
         }
     }
 
-    public function getOAuth(){
+    public function getOAuth()
+    {
         return $this->oauth;
     }
 
@@ -80,4 +82,6 @@ class Auth
         $bytes = openssl_random_pseudo_bytes($len, $cstrong);
         return bin2hex($bytes);
     }
+
+
 }

@@ -124,4 +124,21 @@ class OAuth
         return (substr($string, 0, $len) === $startString);
     }
 
+    public function logout($username)
+    {
+        if($username == $_SESSION['username']){
+            $query = "DELETE FROM `session` WHERE `username` = '$username' ";
+            $result = mysqli_query($this->db, $query);
+            if ($result) {
+                return true;
+            } else {
+                throw new Exception("Accesstoken is required to logout");
+            }
+        }else{
+            throw new exception("Unauthorized");
+        }
+    
+    }
+    
+
 }
